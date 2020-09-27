@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.heq.excel.mapper.FlowInstanceMapper">
+
+    <insert id="batchInsertFlowInstance" parameterType="java.util.List" keyProperty="flowInstanceId" keyColumn="flow_instance_id" useGeneratedKeys="true">
+        insert into flow_instance (
+        flow_instance_id,
+        flow_define_id, flow_current_node_id,flow_next_node_id,
+        flow_instance_status,flow_start_time,flow_start_user_id,
+        flow_end_time, node_deadline_time,flow_end_user_id,
+        tenant_id, product_id,stock_calendar_id, create_by,
+        update_by,node_should_start_time
+        ) values
+        <foreach collection="instanceList" item="item" index="index" separator=",">
+            (
+            #{item.flowInstanceId,jdbcType=INTEGER},
+            #{item.flowDefineId,jdbcType=INTEGER},
+            #{item.flowCurrentNodeId,jdbcType=INTEGER},
+            #{item.flowNextNodeId,jdbcType=INTEGER},
+            #{item.flowInstanceStatus,jdbcType=VARCHAR},
+            #{item.flowStartTime,jdbcType=TIMESTAMP},
+            #{item.flowStartUserId,jdbcType=INTEGER},
+            #{item.flowEndTime,jdbcType=TIMESTAMP},
+            #{item.nodeDeadlineTime,jdbcType=TIMESTAMP},
+            #{item.flowEndUserId,jdbcType=INTEGER},
+            #{item.tenantId,jdbcType=VARCHAR},
+            #{item.productId,jdbcType=INTEGER},
+            #{item.stockCalendarId,jdbcType=INTEGER},
+            #{item.createBy,jdbcType=BIGINT},
+            #{item.updateBy,jdbcType=BIGINT},
+            #{item.nodeShouldStartTime,jdbcType=TIMESTAMP}
+            )
+        </foreach>
+    </insert>
+
+</mapper>

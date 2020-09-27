@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.heq.mapper.InformationMapper">
+
+    <insert id="addScenesInfo" parameterType="com.heq.entity.table.ScenesInfo" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+        INSERT INTO scenes_info ( `created_at`, `operator_id`, `created_by`, `updated_by`, `updated_at`, `update_user_id`, `is_synchronize`, `name`, `remark`,`scenes_code`,`critical_values`)
+        VALUES ( #{createdAt},#{operatorId},#{createdBy},#{updatedBy},#{updatedAt},#{updateUserId},#{isSynchronize}, #{name}, #{remark},#{scenesCode},#{criticalValues})
+    </insert>
+
+    <insert id="addFormulaInfo" parameterType="com.heq.entity.table.FormulaInfo" useGeneratedKeys="true"
+            keyProperty="id" keyColumn="id">
+        INSERT INTO  formula_info ( `created_at`, `operator_id`, `created_by`, `updated_by`, `updated_at`, `update_user_id`, `formula_type`, `is_synchronize`, `match_range`, `match_type`, `name`, `selected`, `formula_scenes_id`, `formula_code`)
+        VALUES ( #{createdAt},#{operatorId},#{createdBy},#{updatedBy},#{updatedAt},#{updateUserId},#{formulaType},#{isSynchronize},#{matchRange},#{matchType},#{name},#{selected},#{formulaScenesId},#{formulaCode})
+    </insert>
+
+    <insert id="addFormulaList" parameterType="java.util.ArrayList" useGeneratedKeys="true" keyProperty="id"
+            keyColumn="id">
+        INSERT INTO formula_info ( `created_at`, `operator_id`, `created_by`, `updated_by`, `updated_at`,
+        `update_user_id`, `formula_type`, `is_synchronize`, `match_range`, `match_type`, `name`, `selected`,
+        `formula_scenes_id`, `formula_code`)VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.createdAt},#{item.operatorId},#{item.createdBy},#{item.updatedBy},#{item.updatedAt},#{item.updateUserId},#{item.formulaType},
+            #{item.isSynchronize},#{item.matchRange},#{item.matchType},#{item.name},#{item.selected},#{item.formulaScenesId},#{item.formulaCode})
+        </foreach>
+    </insert>
+
+    <insert id="addTemplateInfo" parameterType="com.heq.entity.table.TemplateInfo" useGeneratedKeys="true"
+            keyProperty="id" keyColumn="id">
+        INSERT INTO template_info (`created_at`, `operator_id`, `created_by`, `updated_by`, `updated_at`, `update_user_id`, `content`, `scenes_id`)VALUES ( #{createdAt}, #{operatorId}, #{createdBy}, #{updatedBy}, #{updatedAt}, #{updateUserId}, #{content}, #{scenesId})
+    </insert>
+
+    <insert id="addTemplateFormula" parameterType="java.util.ArrayList">
+        INSERT INTO template_formula (`template_id`, `formula_id`) VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            ( #{item.templateId}, #{item.formulaId} )
+        </foreach>
+    </insert>
+
+    <select id="queryTemplateAll" resultType="com.heq.mode.InformationMode">
+        select a.content sentence ,f.name operator,c.name scenes from template_info a inner join template_formula b on a.id=b.template_id
+        inner join formula_info f on b.formula_id =f.id inner join scenes_info c on c.id = a.scenes_id order by a.id
+    </select>
+
+</mapper>

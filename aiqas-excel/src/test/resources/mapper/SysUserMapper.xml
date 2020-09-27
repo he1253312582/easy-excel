@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.heq.mapper.SysUserMapper">
+
+
+    <select id="selectSysUsers" resultType="com.heq.entity.table.SysUser" parameterType="com.heq.entity.table.SysUser">
+        select a.id,a.user_name ,a.pass_word,a.account_Status from sys_user a
+        <where>
+            <if test="id != null and id !=''">a.id =#{id}</if>
+            <if test="userName != null and userName !=''">a.user_name like concat('%',#{userName},'%')</if>
+        </where>
+    </select>
+
+    <select id="selectSysUserByName" resultType="com.heq.entity.table.SysUser" parameterType="String">
+        select a.id,a.user_name ,a.pass_word,a.account_Status from sys_user a where a.user_name =#{userName}
+    </select>
+
+    <select id="selectSysUserById" resultType="com.heq.entity.table.SysUser" parameterType="String">
+        select a.id,a.user_name ,a.pass_word,a.account_Status from sys_user a where a.user_name =#{id}
+    </select>
+
+    <resultMap id="userMapper" type="com.heq.entity.table.SysUser">
+        <id property="id" column="id" jdbcType="VARCHAR"/>
+        <result property="userName" column="user_name" jdbcType="VARCHAR"/>
+        <result property="passWord" column="pass_word" jdbcType="VARCHAR"/>
+        <result property="accountStatus" column="account_status" jdbcType="VARCHAR"/>
+        <collection property="roleSet" javaType="java.util.Set" ofType="com.heq.entity.table.SysRole">
+            <id property="id" column="role_id" javaType="String" jdbcType="VARCHAR"/>
+            <result property="roleName" column="role_name" jdbcType="VARCHAR"/>
+            <result property="description" column="description" jdbcType="VARCHAR"/>
+            <collection property ="menuSet"  javaType="java.util.Set" ofType="com.heq.entity.table.SysMenu">
+                <id property="id" column="menu_id" jdbcType="VARCHAR"/>
+                <result property="parentId" column="parent_id" jdbcType="VARCHAR"/>
+                <result property="menuName" column="menu_name" jdbcType="VARCHAR"/>
+                <result property="href" column="href" jdbcType="VARCHAR"/>
+                <result property="menuLevel" column="menu_level" jdbcType="VARCHAR"/>
+                <result property="icon" column="icon" jdbcType="VARCHAR"/>
+                <result property="sort" column="sort" jdbcType="BIGINT"/>
+            </collection>
+        </collection>
+    </resultMap>
+    <select id="selectUserRoleAndMenu" parameterType="com.heq.entity.table.SysUser" resultMap="userMapper">
+        SELECT a.id, a.user_name, a.pass_word, a.account_Status,  c.id role_id, c.role_name, c.description,
+        e.id menu_id, e.parent_id, e.menu_name, e.icon, e.menu_level, e.sort
+        FROM sys_user AS a
+        INNER JOIN sys_user_role AS b ON b.user_id = a.id
+        INNER JOIN sys_role AS c ON b.role_id = c.id
+        INNER JOIN sys_role_menu AS d ON d.role_id = c.id
+        INNER JOIN sys_menu AS e ON d.menu_id = e.id
+        <where>
+            <if test="id != null and id !=''">a.id =#{id}</if>
+            <if test="userName != null and userName !=''">a.user_name like concat('%',#{userName},'%')</if>
+        </where>
+    </select>
+
+    <select id="selectUserRoleAndMenuByUserName" parameterType="String" resultMap="userMapper">
+        SELECT a.id, a.user_name, a.pass_word, a.account_Status,  c.id role_id, c.role_name, c.description,
+        e.id menu_id, e.parent_id, e.menu_name, e.icon, e.menu_level, e.sort
+        FROM sys_user AS a
+        INNER JOIN sys_user_role AS b ON b.user_id = a.id
+        INNER JOIN sys_role AS c ON b.role_id = c.id
+        INNER JOIN sys_role_menu AS d ON d.role_id = c.id
+        INNER JOIN sys_menu AS e ON d.menu_id = e.id
+        where a.user_name =#{userName}
+    </select>
+
+</mapper>

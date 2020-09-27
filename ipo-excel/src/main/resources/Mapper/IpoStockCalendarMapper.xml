@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.heq.excel.mapper.IpoStockCalendarMapper">
+
+
+    <select id="getInQueryStock" resultType="com.heq.excel.entity.IpoStockCalendar">
+        select
+        x.stock_calendar_id,x.stock_code,x.stock_name,x.stock_market_type,x.submit_check_file_date,x.inquiry_start_time,
+        x.inquiry_end_time,x.sub_start_time,x.sub_end_time,x.pay_dead_line,x.apply_max_amt,x.apply_min_amt,x.asset_amt_cal_date,
+        x.multiple,x.create_by,x.create_time,x.update_by,x.update_time,x.stock_status,x.asset_market_value_date,
+        x.intent_letter_publ_date,x.tj_repot_begin_time,x.check_verify_inquiry_date,x.make_pay_file_start_time,
+        x.submit_pay_file_start_time,x.submit_pay_file_end_time,x.check_pay_result_start_time,x.check_pay_result_end_time,
+        x.node_data_json,x.market_type,x.asset_market_value
+        FROM ipo_stock_calendar x
+        WHERE DATE_FORMAT( x.inquiry_start_time, '%Y-%m-%d' ) = DATE_FORMAT( now(), '%Y-%m-%d');
+    </select>
+    
+    
+</mapper>

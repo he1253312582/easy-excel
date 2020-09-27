@@ -1,0 +1,26 @@
+server:
+  port: 8001
+  name: easy-excel
+  servlet:
+    context-path: /easy-excel
+spring:
+  application:
+    name: easy-excel
+  datasource:
+    url: jdbc:mysql://114.116.79.160:3306/ipo_dev_new?useSSL=false&useUnicode=yes&characterEncoding=UTF-8&allowMultiQueries=true
+    username: ipo_dev_new
+    password: ipo@123QWE!@#
+    driver-class-name: com.mysql.jdbc.Driver
+
+mybatis-plus:
+  type-aliases-package: com.heq.excel.entity
+  configuration:
+    map-underscore-to-camel-case: true
+
+logging:
+  level:
+    root: info
+    com: debug
+
+swagger:
+  enable: true

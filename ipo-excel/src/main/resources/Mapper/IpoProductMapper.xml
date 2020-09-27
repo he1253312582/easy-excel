@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.heq.excel.mapper.IpoProductMapper">
+
+    <update id="updateBatchById" parameterType="java.util.List">
+        <foreach collection="productList" item="item" index="index" open="" close="" separator=";">
+            update ipo_product
+            <set>
+                <if test="item.stockExchangeSzBh != null">
+                    stock_exchange_sz_bh = #{item.stockExchangeSzBh,jdbcType=VARCHAR},
+                </if>
+                <if test="item.allowStockType != null">
+                    allow_stock_type = #{item.productEstimateValue,jdbcType=INTEGER},
+                </if>
+                <if test="item.updateBy != null">
+                    update_by = #{item.updateBy}
+                </if>
+            </set>
+            where product_id =#{item.productId,jdbcType=INTEGER} and  product_code=#{item.productCode,jdbcType=VARCHAR}
+        </foreach>
+    </update>
+</mapper>
